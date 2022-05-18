@@ -3,7 +3,7 @@ import type { AWS } from '@serverless/typescript';
 import hello from '@functions/hello';
 
 const serverlessConfiguration: AWS = {
-  service: 'scaffolding-api-lambda',
+  service: 'api-lambda-orders',
   frameworkVersion: '2',
   plugins: ['serverless-esbuild','serverless-offline'],
   provider: {

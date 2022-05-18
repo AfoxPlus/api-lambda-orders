@@ -1,5 +1,5 @@
 {
-  "name": "scaffolding-api-lambda",
+  "name": "api-lambda-orders",
   "version": "1.0.0",
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
