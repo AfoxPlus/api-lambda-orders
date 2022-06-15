@@ -15,6 +15,7 @@ const send: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (context) 
     const order: Order = {
       id: "",
       date: new Date(orderRequest.date),
+      restaurantId: orderRequest.restaurant_id,
       tableNumber: orderRequest.table_number,
       total: orderRequest.total,
       client: {

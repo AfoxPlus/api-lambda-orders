@@ -26,20 +26,21 @@ export interface OrderDocument extends Document {
 
 const OrderSchema: Schema = new Schema({
     date: { type: Date },
-    tableNumber: Number,
+    tableNumber: String,
     total: Number,
+    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     client: {
         name: { type: String },
         cel: { type: String }
     },
-    detail: {
+    detail: [{
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
         description: { type: String },
         unitPrice: Number,
         quantity: Number,
         subTotal: Number,
         currencyCode: { type: String }
-    }
+    }]
 })
 
 export const OrderModel = mongoose.models.Order || mongoose.model<OrderDocument>('Order', OrderSchema, 'Order')

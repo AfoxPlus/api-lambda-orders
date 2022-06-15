@@ -1,7 +1,7 @@
 export interface OrderDetail {
     productId: string,
     description: string,
-    unitPrice: Number, 
+    unitPrice: Number,
     quantity: Number,
     subTotal: Number,
     currencyCode: string
@@ -15,8 +15,9 @@ export interface Client {
 export interface Order {
     id: string,
     date: Date,
+    restaurantId: string,
     tableNumber: string,
     total: Number,
     client: Client,
-    detail : OrderDetail[]
+    detail: OrderDetail[]
 }
