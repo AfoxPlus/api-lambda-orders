@@ -1,6 +1,5 @@
-import type { AWS } from '@serverless/typescript';
-
-import hello from '@functions/hello';
+import type { AWS } from '@serverless/typescript'
+import sendV1 from '@functions/send/v1'
 
 const serverlessConfiguration: AWS = {
   service: 'api-lambda-orders',
@@ -23,8 +22,8 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  // import the function via paths
-  functions: { hello },
+  
+  functions: { sendV1 },
   package: { individually: true },
   custom: {
     stage: '${opt:stage}',

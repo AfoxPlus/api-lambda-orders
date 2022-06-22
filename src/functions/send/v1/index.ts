@@ -1,4 +1,3 @@
-import schema from './schema';
 import { handlerPath } from '@libs/handlerResolver';
 
 export default {
@@ -7,12 +6,7 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'hello',
-        request: {
-          schemas: {
-            'application/json': schema
-          }
-        }
+        path: 'orders/v1/send'
       }
     }
   ]
