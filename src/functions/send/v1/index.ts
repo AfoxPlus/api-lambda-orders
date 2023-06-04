@@ -6,7 +6,7 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'orders/v1/send'
+        path: 'v1/orders/send'
       }
     }
   ]
