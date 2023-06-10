@@ -14,6 +14,7 @@ export interface Client {
 
 export interface Order {
     id: string,
+    user_uuid: string,
     date: Date,
     restaurantId: string,
     delivery_type: string,

@@ -12,8 +12,11 @@ const send: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (context) 
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
     const orderRequest: OrderSendRequest = context.body
+    const { user_uuid } = context.headers
+
     const order: Order = {
       id: "",
+      user_uuid: user_uuid,
       date: new Date(orderRequest.date),
       restaurantId: orderRequest.restaurant_id,
       delivery_type: orderRequest.delivery_type,
