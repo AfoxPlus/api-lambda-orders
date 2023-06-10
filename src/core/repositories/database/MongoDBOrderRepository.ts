@@ -9,7 +9,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             const result: OrderDocument = await OrderModel.create(order)
             return {
                 id: result._id.toString(),
-                status: 'Pendiente'
+                status: result.state.toString()
             }
 
         } catch (err) {
