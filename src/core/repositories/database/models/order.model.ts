@@ -18,7 +18,7 @@ export interface OrderDocument extends Document {
     _id: Types.ObjectId,
     client: ClientDocument,
     date: Date,
-    tableNumber: string,
+    delivery_type: string,
     restaurantId: Types.ObjectId,
     total: Number,
     detail: OrderDetailDocument[]
@@ -26,7 +26,7 @@ export interface OrderDocument extends Document {
 
 const OrderSchema: Schema = new Schema({
     date: { type: Date },
-    tableNumber: String,
+    delivery_type: String,
     total: Number,
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     client: {
