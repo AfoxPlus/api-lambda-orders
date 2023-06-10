@@ -31,7 +31,7 @@ const OrderSchema: Schema = new Schema({
     date: { type: Date },
     delivery_type: String,
     total: Number,
-    state: { type: String, default: 'Enviado' },
+    state: { type: String, default: 'Pendiente' },
     user_uuid: { type: String },
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     client: {
