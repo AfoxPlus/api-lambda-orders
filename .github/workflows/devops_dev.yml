@@ -3,7 +3,7 @@ name: Api Devops Dev
 on:
   push:
     branches:
-      - 'develop'
+      - 'RC*'
 
 jobs:
   deploy-dev:
