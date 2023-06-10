@@ -4,7 +4,7 @@ export interface OrderSendRequest {
         cel: string
     },
     date: string,
-    table_number: string,
+    delivery_type: string,
     restaurant_id: string,
     detail: [{
         product_id: string,

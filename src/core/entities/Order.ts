@@ -16,7 +16,7 @@ export interface Order {
     id: string,
     date: Date,
     restaurantId: string,
-    tableNumber: string,
+    delivery_type: string,
     total: Number,
     client: Client,
     detail: OrderDetail[]
