@@ -1,6 +1,7 @@
+
 import { Order } from "@core/entities/Order";
-import { OrderSendResponse } from "./models/OrderSendResponse";
+import { OrderStatusResponse } from "@core/models/response/OrderStatusResponse";
 
 export interface OrderRepository {
-    send(order: Order): Promise<OrderSendResponse>
+    send(order: Order): Promise<OrderStatusResponse>
 }

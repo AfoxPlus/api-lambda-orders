@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose'
+import { RestaurantDocument } from './restaurant.model'
 
 export interface OrderDetailDocument extends Document {
     productId: Types.ObjectId,
@@ -21,9 +22,10 @@ export interface OrderDocument extends Document {
     client: ClientDocument,
     date: Date,
     delivery_type: string,
-    restaurantId: Types.ObjectId,
+    restaurant: RestaurantDocument,
     total: Number,
     state: String,
+    is_done: Boolean,
     detail: OrderDetailDocument[]
 }
 
@@ -33,7 +35,8 @@ const OrderSchema: Schema = new Schema({
     total: Number,
     state: { type: String, default: 'Pendiente' },
     user_uuid: { type: String },
-    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
+    is_done: { type: Boolean, default: false },
+    restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     client: {
         name: { type: String },
         cel: { type: String }

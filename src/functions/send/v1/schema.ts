@@ -12,6 +12,5 @@ export default {
             date: { type: 'string' },
             detail: { type: 'array' }
         },
-    },
-    required: ['name']
+    }
 } as const;
