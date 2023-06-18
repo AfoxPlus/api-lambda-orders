@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript'
 import sendV1 from '@functions/send/v1'
 import status from '@functions/status'
+import find from '@functions/find'
 
 const serverlessConfiguration: AWS = {
   service: 'api-lambda-orders',
@@ -24,7 +25,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
 
-  functions: { sendV1, status },
+  functions: { sendV1, status, find },
   package: { individually: true },
   custom: {
     stage: '${opt:stage}',
