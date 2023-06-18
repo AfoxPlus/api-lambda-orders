@@ -1,10 +1,11 @@
 import type { AWS } from '@serverless/typescript'
 import sendV1 from '@functions/send/v1'
+import status from '@functions/status'
 
 const serverlessConfiguration: AWS = {
   service: 'api-lambda-orders',
   frameworkVersion: '2',
-  plugins: ['serverless-esbuild','serverless-offline'],
+  plugins: ['serverless-esbuild', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -22,8 +23,8 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  
-  functions: { sendV1 },
+
+  functions: { sendV1, status },
   package: { individually: true },
   custom: {
     stage: '${opt:stage}',

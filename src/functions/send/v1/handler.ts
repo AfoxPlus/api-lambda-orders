@@ -1,13 +1,12 @@
 import { Order } from '@core/entities/Order'
 import { MongoDBOrderRepository } from '@core/repositories/database/MongoDBOrderRepository'
-import { OrderSendRequest } from '@core/repositories/models/OrderSendRequest';
 import { OrderRepository } from '@core/repositories/OrderRepository';
 import { mongodbconnect } from '@core/utils/mongodb_connection';
 import { formatJSONErrorResponse, formatJSONSuccessResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway'
 import { middyfy } from '@libs/lambda'
-import schema from './schema'
+import { OrderSendRequest } from '@core/models/request/OrderSendRequest';
 
-const send: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (context) => {
+const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (context) => {
   try {
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
@@ -16,9 +15,10 @@ const send: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (context) 
 
     const order: Order = {
       id: "",
+      isDone: false,
       user_uuid: user_uuid,
       date: new Date(orderRequest.date),
-      restaurantId: orderRequest.restaurant_id,
+      restaurant: orderRequest.restaurant_id,
       delivery_type: orderRequest.delivery_type,
       total: orderRequest.total,
       client: {
