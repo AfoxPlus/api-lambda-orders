@@ -4,4 +4,5 @@ import { OrderStatusResponse } from "@core/models/response/OrderStatusResponse";
 
 export interface OrderRepository {
     send(order: Order): Promise<OrderStatusResponse>
+    status(userUUID: string): Promise<OrderStatusResponse[]>
 }

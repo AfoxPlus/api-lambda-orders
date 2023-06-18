@@ -5,6 +5,21 @@ import { OrderDocument, OrderModel } from "@core/repositories/database/models/or
 import { RestaurantModel } from "@core/repositories/database/models/restaurant.model";
 
 export class MongoDBOrderRepository implements OrderRepository {
+    status = async (userUUID: string): Promise<OrderStatusResponse[]> => {
+        try {
+            const result: OrderDocument[] = await OrderModel.find({ user_uuid: userUUID, is_done: false })
+                .populate({ path: 'restaurant', model: RestaurantModel })
+            return result.map((document) => ({
+                id: document._id.toString(),
+                status: document.state.toString(),
+                total: document.total,
+                delivery_type: document.delivery_type,
+                restaurant: document.restaurant.name
+            }))
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
     send = async (order: Order): Promise<OrderStatusResponse> => {
         try {
             let result: OrderDocument = await OrderModel.create(order)

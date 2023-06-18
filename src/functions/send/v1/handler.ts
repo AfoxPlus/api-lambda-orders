@@ -4,10 +4,9 @@ import { OrderRepository } from '@core/repositories/OrderRepository';
 import { mongodbconnect } from '@core/utils/mongodb_connection';
 import { formatJSONErrorResponse, formatJSONSuccessResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway'
 import { middyfy } from '@libs/lambda'
-import schema from './schema'
 import { OrderSendRequest } from '@core/models/request/OrderSendRequest';
 
-const send: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (context) => {
+const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (context) => {
   try {
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
