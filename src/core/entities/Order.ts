@@ -16,6 +16,7 @@ export interface Order {
     id: string,
     user_uuid: string,
     date: Date,
+    state: string,
     isDone: Boolean,
     restaurant: string,
     delivery_type: string,

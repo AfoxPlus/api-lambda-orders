@@ -15,6 +15,7 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
 
     const order: Order = {
       id: "",
+      state: "Pendiente",
       isDone: false,
       user_uuid: user_uuid,
       date: new Date(orderRequest.date),
