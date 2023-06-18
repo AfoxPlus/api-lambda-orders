@@ -9,7 +9,7 @@ const status: APIGatewayProxyHandler = async (context) => {
   try {
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
-    const { user_uuid } = context.pathParameters
+    const { user_uuid } = context.headers
 
     const result = await orderRepository.status(user_uuid)
 
