@@ -4,19 +4,17 @@ import { OrderRepository } from '@core/repositories/OrderRepository';
 import { mongodbconnect } from '@core/utils/mongodb_connection';
 import { formatJSONErrorResponse, formatJSONSuccessResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway'
 import { middyfy } from '@libs/lambda'
-import { OrderSendRequest } from '@core/models/request/OrderSendRequest';
+import { OrderSendRequest } from '@functions/send/v1/OrderSendRequest';
 
 const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (context) => {
   try {
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
-    const orderRequest: OrderSendRequest = context.body
+    const orderRequest: OrderSendRequest = context.body as OrderSendRequest
     const { user_uuid } = context.headers
-
+    const number = await orderRepository.getNumberOrder(orderRequest.restaurant_id)
     const order: Order = {
-      id: "",
-      state: "Pendiente",
-      isDone: false,
+      number: number,
       user_uuid: user_uuid,
       date: new Date(orderRequest.date),
       restaurant: orderRequest.restaurant_id,
