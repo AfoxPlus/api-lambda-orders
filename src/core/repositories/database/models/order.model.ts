@@ -18,6 +18,7 @@ export interface ClientDocument extends Document {
 
 export interface OrderDocument extends Document {
     _id: Types.ObjectId,
+    number: String,
     user_uuid: String,
     client: ClientDocument,
     date: Date,
@@ -30,6 +31,7 @@ export interface OrderDocument extends Document {
 }
 
 const OrderSchema: Schema = new Schema({
+    number: String,
     date: { type: Date },
     delivery_type: String,
     total: Number,
