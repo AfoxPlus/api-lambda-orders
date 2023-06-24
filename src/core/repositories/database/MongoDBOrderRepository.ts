@@ -56,9 +56,9 @@ export class MongoDBOrderRepository implements OrderRepository {
             detail: result.detail.map((document) => ({
                 productId: document.productId.toString(),
                 description: document.description,
-                unitPrice: `${result.currencySymbol} ${result.unitPrice}`,
+                unitPrice: `${result.currencySymbol} ${document.unitPrice}`,
                 quantity: document.quantity,
-                subTotal: `${result.currencySymbol} ${result.subTotal}`
+                subTotal: `${result.currencySymbol} ${document.subTotal}`
             }))
         }
     }

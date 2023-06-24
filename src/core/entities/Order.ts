@@ -3,8 +3,7 @@ export interface OrderDetail {
     description: string,
     unitPrice: Number,
     quantity: Number,
-    subTotal: Number,
-    currencyCode: string
+    subTotal: Number
 }
 
 export interface Client {

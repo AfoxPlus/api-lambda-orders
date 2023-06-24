@@ -60,8 +60,7 @@ const OrderSchema: Schema = new Schema({
         description: { type: String },
         unitPrice: Number,
         quantity: Number,
-        subTotal: Number,
-        currencySymbol: { type: String }
+        subTotal: Number
     }]
 })
 

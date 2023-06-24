@@ -33,8 +33,7 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
         description: item.description,
         unitPrice: item.unit_price,
         quantity: item.quantity,
-        subTotal: item.sub_total,
-        currencyCode: item.currency_code
+        subTotal: item.sub_total
       }))
     }
     const result = await orderRepository.send(order)
