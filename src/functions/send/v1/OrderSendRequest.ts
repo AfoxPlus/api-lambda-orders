@@ -9,7 +9,6 @@ export interface OrderSendRequest {
         description: string
     },
     restaurant_id: string,
-    currencySymbol: string,
     detail: [{
         product_id: string,
         description: string,

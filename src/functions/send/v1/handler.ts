@@ -11,13 +11,13 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
     const orderRequest: OrderSendRequest = context.body as OrderSendRequest
-    const { user_uuid } = context.headers
+    const { user_uuid, currency_symbol } = context.headers
     const number = await orderRepository.getNumberOrder(orderRequest.restaurant_id)
     const order: Order = {
       number: number,
       user_uuid: user_uuid,
       restaurant: orderRequest.restaurant_id,
-      currencySymbol: orderRequest.currencySymbol,
+      currencySymbol: currency_symbol,
       orderType: {
         code: orderRequest.orderType.code,
         description: orderRequest.orderType.description
