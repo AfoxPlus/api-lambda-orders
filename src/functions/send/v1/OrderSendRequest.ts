@@ -1,7 +1,7 @@
 export interface OrderSendRequest {
     client: {
         name: string,
-        cel: string,
+        cel?: string,
         addressReference?: string
     },
     orderType: {

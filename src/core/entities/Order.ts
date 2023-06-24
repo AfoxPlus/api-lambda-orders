@@ -9,7 +9,7 @@ export interface OrderDetail {
 
 export interface Client {
     name: string,
-    cel: string,
+    cel?: string,
     addressReference?: string
 }
 
