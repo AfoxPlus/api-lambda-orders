@@ -1,4 +1,5 @@
 import { Order } from "@core/entities/Order";
+import { OrderStatus } from "@core/entities/OrderStatus";
 import { OrderRepository } from "@core/repositories/OrderRepository";
 import { OrderDocument, OrderModel } from "@core/repositories/database/models/order.model";
 import { RestaurantModel } from "@core/repositories/database/models/restaurant.model";
@@ -23,7 +24,7 @@ export class MongoDBOrderRepository implements OrderRepository {
         }
     }
 
-    status = async (userUUID: string): Promise<Order[]> => {
+    status = async (userUUID: string): Promise<OrderStatus[]> => {
         try {
             const result: OrderDocument[] = await OrderModel.find({ user_uuid: userUUID, is_done: false })
                 .populate({ path: 'restaurant', model: RestaurantModel })
@@ -32,7 +33,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             throw new Error("Internal Error")
         }
     }
-    send = async (order: Order): Promise<Order> => {
+    send = async (order: Order): Promise<OrderStatus> => {
         try {
             let result: OrderDocument = await OrderModel.create(order)
             result = await result.populate({ path: 'restaurant', model: RestaurantModel })
@@ -42,23 +43,22 @@ export class MongoDBOrderRepository implements OrderRepository {
         }
     }
 
-    documentToOrder(result: any): Order {
+    documentToOrder(result: any): OrderStatus {
         return {
             id: result._id.toString(),
             number: `#${result.number}`,
-            date: result.date,
+            date: result.date.toString(),
             state: result.state,
             restaurant: result.restaurant.name,
-            delivery_type: result.delivery_type,
-            total: result.total,
+            orderType: result.orderType,
+            total: `${result.currencySymbol} ${result.total}`,
             client: result.client,
             detail: result.detail.map((document) => ({
                 productId: document.productId.toString(),
                 description: document.description,
-                unitPrice: document.unitPrice,
+                unitPrice: `${result.currencySymbol} ${result.unitPrice}`,
                 quantity: document.quantity,
-                subTotal: document.subTotal,
-                currencyCode: document.currencyCode
+                subTotal: `${result.currencySymbol} ${result.subTotal}`
             }))
         }
     }

@@ -16,13 +16,17 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
     const order: Order = {
       number: number,
       user_uuid: user_uuid,
-      date: new Date(orderRequest.date),
       restaurant: orderRequest.restaurant_id,
-      delivery_type: orderRequest.delivery_type,
+      currencySymbol: orderRequest.currencySymbol,
+      orderType: {
+        code: orderRequest.orderType.code,
+        description: orderRequest.orderType.description
+      },
       total: orderRequest.total,
       client: {
         cel: orderRequest.client.cel,
-        name: orderRequest.client.name
+        name: orderRequest.client.name,
+        addressReference: orderRequest.client.addressReference
       },
       detail: orderRequest.detail.map(item => ({
         productId: item.product_id,
@@ -34,6 +38,7 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
       }))
     }
     const result = await orderRepository.send(order)
+
     return formatJSONSuccessResponse({
       success: true,
       payload: result,

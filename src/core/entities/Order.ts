@@ -9,19 +9,26 @@ export interface OrderDetail {
 
 export interface Client {
     name: string,
-    cel: string
+    cel: string,
+    addressReference?: string
 }
 
 export interface Order {
     id?: string,
     user_uuid?: string,
     number?: string,
-    date: Date,
+    date?: string,
+    currencySymbol: string,
     state?: string,
     isDone?: Boolean,
     restaurant: string,
-    delivery_type: string,
+    orderType: OrderType,
     total: Number,
     client: Client,
     detail: OrderDetail[]
+}
+
+export interface OrderType {
+    code?: string,
+    description: string
 }

@@ -13,7 +13,14 @@ export interface OrderDetailDocument extends Document {
 export interface ClientDocument extends Document {
     uuid: string,
     name: string,
-    cel: string
+    cel: string,
+    addressReference?: string
+}
+
+export interface OrderTypeDocument extends Document {
+    _id: Types.ObjectId,
+    code: string,
+    description: string
 }
 
 export interface OrderDocument extends Document {
@@ -32,16 +39,21 @@ export interface OrderDocument extends Document {
 
 const OrderSchema: Schema = new Schema({
     number: String,
-    date: { type: Date },
-    delivery_type: String,
+    date: { type: Date, default: Date.now },
     total: Number,
     state: { type: String, default: 'Pendiente' },
     user_uuid: { type: String },
     is_done: { type: Boolean, default: false },
+    currencySymbol: { type: String },
     restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     client: {
         name: { type: String },
-        cel: { type: String }
+        cel: { type: String },
+        addressReference: { type: String }
+    },
+    orderType: {
+        code: { type: String, required: true },
+        description: { type: String }
     },
     detail: [{
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
@@ -49,7 +61,7 @@ const OrderSchema: Schema = new Schema({
         unitPrice: Number,
         quantity: Number,
         subTotal: Number,
-        currencyCode: { type: String }
+        currencySymbol: { type: String }
     }]
 })
 

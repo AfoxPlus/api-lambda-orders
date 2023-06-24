@@ -1,11 +1,15 @@
 export interface OrderSendRequest {
     client: {
         name: string,
-        cel: string
+        cel: string,
+        addressReference?: string
     },
-    date: string,
-    delivery_type: string,
+    orderType: {
+        code: string,
+        description: string
+    },
     restaurant_id: string,
+    currencySymbol: string,
     detail: [{
         product_id: string,
         description: string,
