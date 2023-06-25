@@ -1,23 +1,17 @@
 import { Order } from "@core/entities/Order";
 import { OrderStatus } from "@core/entities/OrderStatus";
 import { OrderRepository } from "@core/repositories/OrderRepository";
-import { OrderDocument, OrderModel } from "@core/repositories/database/models/order.model";
+import { OrderDetailDocument, OrderDocument, OrderModel } from "@core/repositories/database/models/order.model";
 import { RestaurantModel } from "@core/repositories/database/models/restaurant.model";
+import { CurrencyModel } from "./models/currency.model";
 
 export class MongoDBOrderRepository implements OrderRepository {
-    getNumberOrder = async (restaurantCode: string): Promise<string> => {
-        try {
-            const result: number = await OrderModel.countDocuments({ restaurant: restaurantCode })
-            const number = result + 1
-            return this.paddy(number, 6).toString()
-        } catch (err) {
-            throw new Error("Internal Error")
-        }
-    }
-    findOne = async (orderId: string): Promise<Order> => {
+
+    findOne = async (orderId: string): Promise<OrderStatus> => {
         try {
             const result = await OrderModel.findById(orderId)
                 .populate({ path: 'restaurant', model: RestaurantModel })
+                .populate({ path: 'currency', model: CurrencyModel })
             return this.documentToOrder(result)
         } catch (err) {
             throw new Error("Internal Error")
@@ -28,39 +22,56 @@ export class MongoDBOrderRepository implements OrderRepository {
         try {
             const result: OrderDocument[] = await OrderModel.find({ user_uuid: userUUID, is_done: false })
                 .populate({ path: 'restaurant', model: RestaurantModel })
+                .populate({ path: 'currency', model: CurrencyModel })
             return result.map((document) => this.documentToOrder(document))
         } catch (err) {
             throw new Error("Internal Error")
         }
     }
-    send = async (order: Order): Promise<OrderStatus> => {
+
+    send = async (order: Order, restaurantCode: string): Promise<OrderStatus> => {
         try {
+            const currentNumber: number = await OrderModel.countDocuments({ restaurant: restaurantCode })
+            order.number = this.paddy((currentNumber + 1), 6).toString()
             let result: OrderDocument = await OrderModel.create(order)
-            result = await result.populate({ path: 'restaurant', model: RestaurantModel })
+            result = await (await result.populate({ path: 'restaurant', model: RestaurantModel })).populate({ path: 'currency', model: CurrencyModel })
             return this.documentToOrder(result)
         } catch (err) {
             throw new Error("Internal Error")
         }
     }
 
-    documentToOrder(result: any): OrderStatus {
+    documentToOrder(result: OrderDocument): OrderStatus {
         return {
             id: result._id.toString(),
             number: `#${result.number}`,
             date: result.date.toString(),
-            state: result.state,
+            state: result.state.toString(),
             restaurant: result.restaurant.name,
-            orderType: result.orderType,
-            total: `${result.currencySymbol} ${result.total}`,
-            client: result.client,
-            detail: result.detail.map((document) => ({
-                productId: document.productId.toString(),
-                description: document.description,
-                unitPrice: `${result.currencySymbol} ${document.unitPrice}`,
-                quantity: document.quantity,
-                subTotal: `${result.currencySymbol} ${document.subTotal}`
-            }))
+            order_type: {
+                code: result.orderType.code,
+                title: result.orderType.title,
+                description: result.orderType.description
+            },
+            total: `${result.currency.value} ${result.total.toFixed(2)}`,
+            client: {
+                name: result.client.name,
+                cel: result.client.cel,
+                address_reference: result.client.addressReference
+            },
+            detail: this.documentDetailToOrderDetail(result.detail, result.currency.value)
         }
+    }
+
+    documentDetailToOrderDetail(details: OrderDetailDocument[], currency: string): any {
+        const detail = details.map((document) => ({
+            productId: document.productId.toString(),
+            description: document.description,
+            unitPrice: `${currency} ${document.unitPrice.toFixed(2)}`,
+            quantity: document.quantity,
+            subTotal: `${currency} ${document.subTotal.toFixed(2)}`
+        }))
+        return detail
     }
 
     paddy(num, padlen, padchar?) {

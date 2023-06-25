@@ -14,12 +14,12 @@ export interface Client {
 
 export interface Order {
     id?: string,
-    user_uuid?: string,
+    userUUID?: string,
     number?: string,
     date?: string,
-    currencySymbol: string,
     state?: string,
     isDone?: Boolean,
+    currency: string,
     restaurant: string,
     orderType: OrderType,
     total: Number,
@@ -29,5 +29,6 @@ export interface Order {
 
 export interface OrderType {
     code?: string,
-    description: string
+    title: string,
+    description?: string
 }

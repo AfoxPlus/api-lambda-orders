@@ -4,15 +4,16 @@ export interface OrderStatus {
     date: string,
     state: string,
     restaurant: string,
-    orderType: {
+    order_type: {
         code: string,
-        description: string
+        title: string,
+        description?: string
     },
     total: string,
     client: {
         name: string,
         cel?: string,
-        addressReference?: string
+        address_reference?: string
     },
     detail: [{
         productId: string,
