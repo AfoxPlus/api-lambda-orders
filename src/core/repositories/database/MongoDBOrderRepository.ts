@@ -21,7 +21,7 @@ export class MongoDBOrderRepository implements OrderRepository {
 
     status = async (userUUID: string): Promise<OrderStatus[]> => {
         try {
-            const result: OrderDocument[] = await OrderModel.find({ user_uuid: userUUID, is_done: false })
+            const result: OrderDocument[] = await OrderModel.find({ isDone: false }).where('userUUID').equals(userUUID)
                 .populate({ path: 'restaurant', model: RestaurantModel })
                 .populate({ path: 'currency', model: CurrencyModel })
             return result.map((document) => this.documentToOrder(document))
