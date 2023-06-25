@@ -20,7 +20,6 @@ const status: APIGatewayProxyHandler = async (context) => {
     });
 
   } catch (err) {
-    console.log(err)
     return formatJSONErrorResponse(err);
   }
 }
