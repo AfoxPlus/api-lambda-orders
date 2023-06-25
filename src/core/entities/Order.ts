@@ -3,25 +3,32 @@ export interface OrderDetail {
     description: string,
     unitPrice: Number,
     quantity: Number,
-    subTotal: Number,
-    currencyCode: string
+    subTotal: Number
 }
 
 export interface Client {
     name: string,
-    cel: string
+    cel?: string,
+    addressReference?: string
 }
 
 export interface Order {
     id?: string,
-    user_uuid?: string,
+    userUUID?: string,
     number?: string,
-    date: Date,
+    date?: string,
     state?: string,
     isDone?: Boolean,
+    currency: string,
     restaurant: string,
-    delivery_type: string,
+    orderType: OrderType,
     total: Number,
     client: Client,
     detail: OrderDetail[]
+}
+
+export interface OrderType {
+    code?: string,
+    title: string,
+    description?: string
 }
