@@ -3,7 +3,8 @@ import { OrderStatus } from "@core/entities/OrderStatus";
 import { OrderRepository } from "@core/repositories/OrderRepository";
 import { OrderDetailDocument, OrderDocument, OrderModel } from "@core/repositories/database/models/order.model";
 import { RestaurantModel } from "@core/repositories/database/models/restaurant.model";
-import { CurrencyModel } from "./models/currency.model";
+import { CurrencyModel } from "@core/repositories/database/models/currency.model";
+import moment from 'moment';
 
 export class MongoDBOrderRepository implements OrderRepository {
 
@@ -45,7 +46,7 @@ export class MongoDBOrderRepository implements OrderRepository {
         return {
             id: result._id.toString(),
             number: `#${result.number}`,
-            date: result.date.toString(),
+            date: (moment(result.date)).format('DD MMM YYYY, hh:mm A'),
             state: result.state.toString(),
             restaurant: result.restaurant.name,
             order_type: {
