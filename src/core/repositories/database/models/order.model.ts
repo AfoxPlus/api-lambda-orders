@@ -4,6 +4,7 @@ import { CurrencyDocument } from '@core/repositories/database/models/currency.mo
 
 export interface OrderDetailDocument extends Document {
     productId: Types.ObjectId,
+    title: string,
     description: string,
     unitPrice: Number,
     quantity: Number,
@@ -62,6 +63,7 @@ const OrderSchema: Schema = new Schema({
     },
     detail: [{
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        title: { type: String },
         description: { type: String },
         unitPrice: Number,
         quantity: Number,

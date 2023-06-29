@@ -46,7 +46,7 @@ export class MongoDBOrderRepository implements OrderRepository {
         return {
             id: result._id.toString(),
             number: `#${result.number}`,
-            date: (moment(result.date)).format('DD MMM YYYY, hh:mm A'),
+            date: (moment(result.date)).format('DD MMM YYYY, h:mm A'),
             state: result.state.toString(),
             restaurant: result.restaurant.name,
             order_type: {
@@ -67,6 +67,7 @@ export class MongoDBOrderRepository implements OrderRepository {
     documentDetailToOrderDetail(details: OrderDetailDocument[], currency: string): any {
         const detail = details.map((document) => ({
             productId: document.productId.toString(),
+            title: document.title,
             description: document.description,
             unitPrice: `${currency} ${document.unitPrice.toFixed(2)}`,
             quantity: document.quantity,
