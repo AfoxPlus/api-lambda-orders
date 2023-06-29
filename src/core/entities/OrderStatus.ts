@@ -17,6 +17,7 @@ export interface OrderStatus {
     },
     detail: [{
         productId: string,
+        title: string,
         description: string,
         unitPrice: string,
         quantity: Number,

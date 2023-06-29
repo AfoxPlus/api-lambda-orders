@@ -19,6 +19,7 @@ export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_uuid: str
         },
         detail: orderRequest.detail.map(item => ({
             productId: item.product_id,
+            title: item.title,
             description: item.description,
             unitPrice: item.unit_price,
             quantity: item.quantity,

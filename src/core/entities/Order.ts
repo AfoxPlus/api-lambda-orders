@@ -1,5 +1,6 @@
 export interface OrderDetail {
     productId: string,
+    title: string,
     description: string,
     unitPrice: Number,
     quantity: Number,

@@ -12,6 +12,7 @@ export interface OrderSendRequest {
     restaurant_id: string,
     detail: [{
         product_id: string,
+        title: string,
         description: string,
         unit_price: Number,
         quantity: Number,
