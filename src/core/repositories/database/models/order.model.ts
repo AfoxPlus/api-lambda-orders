@@ -75,6 +75,7 @@ const OrderSchema: Schema = new Schema({
         title: { type: String },
         description: { type: String },
         unitPrice: Number,
+        quantity: Number,
         subTotal: Number,
         note: { type: String },
         subDetail: [{
