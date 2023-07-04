@@ -46,7 +46,7 @@ export class MongoDBOrderRepository implements OrderRepository {
         return {
             id: result._id.toString(),
             number: `#${result.number}`,
-            date: (moment(result.date)).utcOffset('America/Lima').format('DD MMM YYYY, hh:mm A'),
+            date: (moment(result.date)).utcOffset(-5).format('DD MMM YYYY, hh:mm A'),
             state: result.state.toString(),
             restaurant: result.restaurant.name,
             order_type: {
