@@ -23,7 +23,13 @@ export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_uuid: str
             description: item.description,
             unitPrice: item.unit_price,
             quantity: item.quantity,
-            subTotal: item.sub_total
+            subTotal: item.sub_total,
+            note: item.note,
+            subDetail: item.sub_detail?.map(subItem => ({
+                productId: subItem.product_id,
+                title: subItem.title,
+                quantity: subItem.quantity
+            }))
         }))
     }
     return order

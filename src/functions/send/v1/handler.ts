@@ -15,7 +15,6 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
 
     const order = mapRequestToOrder(orderRequest, user_uuid, currency_id)
     const result = await orderRepository.send(order, orderRequest.restaurant_id)
-
     return formatJSONSuccessResponse({
       success: true,
       payload: result,

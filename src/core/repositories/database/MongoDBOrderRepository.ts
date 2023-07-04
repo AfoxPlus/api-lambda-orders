@@ -1,7 +1,7 @@
 import { Order } from "@core/entities/Order";
 import { OrderStatus } from "@core/entities/OrderStatus";
 import { OrderRepository } from "@core/repositories/OrderRepository";
-import { OrderDetailDocument, OrderDocument, OrderModel } from "@core/repositories/database/models/order.model";
+import { OrderDetailDocument, OrderDocument, OrderModel, OrderSubDetailDocument } from "@core/repositories/database/models/order.model";
 import { RestaurantModel } from "@core/repositories/database/models/restaurant.model";
 import { CurrencyModel } from "@core/repositories/database/models/currency.model";
 import moment from 'moment';
@@ -46,7 +46,7 @@ export class MongoDBOrderRepository implements OrderRepository {
         return {
             id: result._id.toString(),
             number: `#${result.number}`,
-            date: (moment(result.date)).format('DD MMM YYYY, h:mm A'),
+            date: (moment(result.date)).format('DD MMM YYYY, hh:mm A'),
             state: result.state.toString(),
             restaurant: result.restaurant.name,
             order_type: {
@@ -71,9 +71,20 @@ export class MongoDBOrderRepository implements OrderRepository {
             description: document.description,
             unitPrice: `${currency} ${document.unitPrice.toFixed(2)}`,
             quantity: document.quantity,
-            subTotal: `${currency} ${document.subTotal.toFixed(2)}`
+            subTotal: `${currency} ${document.subTotal.toFixed(2)}`,
+            note: document.note,
+            subDetail: this.documentSubDetailToOrderSubDetail(document.subDetail)
         }))
         return detail
+    }
+
+    documentSubDetailToOrderSubDetail(subDetails?: OrderSubDetailDocument[]): any {
+        const result = subDetails.map((subDocument) => ({
+            productId: subDocument.productId.toString(),
+            title: subDocument.title,
+            quantity: subDocument.quantity
+        }))
+        return result
     }
 
     paddy(num, padlen, padchar?) {

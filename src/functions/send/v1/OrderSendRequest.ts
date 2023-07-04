@@ -16,7 +16,13 @@ export interface OrderSendRequest {
         description: string,
         unit_price: Number,
         quantity: Number,
-        sub_total: Number
+        sub_total: Number,
+        note?: string,
+        sub_detail?: [{
+            product_id: string,
+            title: string,
+            quantity: Number
+        }]
     }],
     total: Number
 }
