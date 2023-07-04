@@ -2,6 +2,12 @@ import mongoose, { Schema, Document, Types } from 'mongoose'
 import { RestaurantDocument } from '@core/repositories/database/models/restaurant.model'
 import { CurrencyDocument } from '@core/repositories/database/models/currency.model'
 
+export interface OrderSubDetailDocument extends Document {
+    productId: Types.ObjectId,
+    title: string,
+    quantity: Number
+}
+
 export interface OrderDetailDocument extends Document {
     productId: Types.ObjectId,
     title: string,
@@ -9,6 +15,8 @@ export interface OrderDetailDocument extends Document {
     unitPrice: Number,
     quantity: Number,
     subTotal: Number,
+    subDetail?: OrderSubDetailDocument[],
+    note?: string,
     currencyCode: string
 }
 
@@ -51,6 +59,7 @@ const OrderSchema: Schema = new Schema({
     isDone: { type: Boolean, default: false },
     currency: { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
     restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
+    note: { type: String },
     client: {
         name: { type: String },
         cel: { type: String },
@@ -66,8 +75,13 @@ const OrderSchema: Schema = new Schema({
         title: { type: String },
         description: { type: String },
         unitPrice: Number,
-        quantity: Number,
-        subTotal: Number
+        subTotal: Number,
+        note: { type: String },
+        subDetail: [{
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+            title: { type: String },
+            quantity: Number
+        }]
     }]
 })
 

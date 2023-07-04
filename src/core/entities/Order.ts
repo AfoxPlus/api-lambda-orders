@@ -1,10 +1,18 @@
+export interface OrderSubDetail {
+    productId: string,
+    title: string,
+    quantity: Number
+}
+
 export interface OrderDetail {
     productId: string,
     title: string,
     description: string,
     unitPrice: Number,
     quantity: Number,
-    subTotal: Number
+    subTotal: Number,
+    note: string,
+    subDetail?: OrderSubDetail[]
 }
 
 export interface Client {
