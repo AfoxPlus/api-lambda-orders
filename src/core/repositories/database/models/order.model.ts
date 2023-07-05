@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Types } from 'mongoose'
 import { RestaurantDocument } from '@core/repositories/database/models/restaurant.model'
 import { CurrencyDocument } from '@core/repositories/database/models/currency.model'
+import { OrderStateDocument } from '@core/repositories/database/models/order_state.model'
 
 export interface OrderSubDetailDocument extends Document {
     productId: Types.ObjectId,
@@ -45,7 +46,7 @@ export interface OrderDocument extends Document {
     currency: CurrencyDocument,
     restaurant: RestaurantDocument,
     total: Number,
-    state: String,
+    orderState: OrderStateDocument,
     isDone: Boolean,
     detail: OrderDetailDocument[]
 }
@@ -54,7 +55,7 @@ const OrderSchema: Schema = new Schema({
     number: String,
     date: { type: Date, default: Date.now },
     total: Number,
-    state: { type: String, default: 'Pendiente' },
+    orderState: { type: mongoose.Schema.Types.ObjectId, ref: 'OrderState' },
     userUUID: { type: String },
     isDone: { type: Boolean, default: false },
     currency: { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },

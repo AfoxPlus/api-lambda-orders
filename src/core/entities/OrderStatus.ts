@@ -3,6 +3,7 @@ export interface OrderStatus {
     number: string,
     date: string,
     state: string,
+    state_code: string,
     restaurant: string,
     order_type: {
         code: string,

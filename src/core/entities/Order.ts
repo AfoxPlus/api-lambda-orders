@@ -26,7 +26,7 @@ export interface Order {
     userUUID?: string,
     number?: string,
     date?: string,
-    state?: string,
+    orderState?: string,
     isDone?: Boolean,
     currency: string,
     restaurant: string,
