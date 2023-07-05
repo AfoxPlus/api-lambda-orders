@@ -5,6 +5,7 @@ import { OrderDetailDocument, OrderDocument, OrderModel, OrderSubDetailDocument 
 import { RestaurantModel } from "@core/repositories/database/models/restaurant.model";
 import { CurrencyModel } from "@core/repositories/database/models/currency.model";
 import moment from 'moment';
+import { OrderStateDocument, OrderStateModel } from "@core/repositories/database/models/order_state.model";
 
 export class MongoDBOrderRepository implements OrderRepository {
 
@@ -13,6 +14,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             const result = await OrderModel.findById(orderId)
                 .populate({ path: 'restaurant', model: RestaurantModel })
                 .populate({ path: 'currency', model: CurrencyModel })
+                .populate({ path: 'orderState', model: OrderStateModel })
             return this.documentToOrder(result)
         } catch (err) {
             throw new Error("Internal Error")
@@ -24,18 +26,24 @@ export class MongoDBOrderRepository implements OrderRepository {
             const result: OrderDocument[] = await OrderModel.find({ isDone: false }).where('userUUID').equals(userUUID)
                 .populate({ path: 'restaurant', model: RestaurantModel })
                 .populate({ path: 'currency', model: CurrencyModel })
+                .populate({ path: 'orderState', model: OrderStateModel })
             return result.map((document) => this.documentToOrder(document))
         } catch (err) {
+
             throw new Error("Internal Error")
         }
     }
 
     send = async (order: Order, restaurantCode: string): Promise<OrderStatus> => {
         try {
+            const orderState: OrderStateDocument = await OrderStateModel.findOne().where('code').equals("TODO")
             const currentNumber: number = await OrderModel.countDocuments({ restaurant: restaurantCode })
             order.number = this.paddy((currentNumber + 1), 6).toString()
+            order.orderState = orderState._id.toString()
             let result: OrderDocument = await OrderModel.create(order)
-            result = await (await result.populate({ path: 'restaurant', model: RestaurantModel })).populate({ path: 'currency', model: CurrencyModel })
+            result = await result.populate({ path: 'restaurant', model: RestaurantModel })
+            result = await result.populate({ path: 'currency', model: CurrencyModel })
+            result = await result.populate({ path: 'orderState', model: OrderStateModel })
             return this.documentToOrder(result)
         } catch (err) {
             throw new Error("Internal Error")
@@ -47,7 +55,8 @@ export class MongoDBOrderRepository implements OrderRepository {
             id: result._id.toString(),
             number: `#${result.number}`,
             date: (moment(result.date)).utcOffset(-5).format('DD MMM YYYY, hh:mm A'),
-            state: result.state.toString(),
+            state: result.orderState.name,
+            state_code: result.orderState.code,
             restaurant: result.restaurant.name,
             order_type: {
                 code: result.orderType.code,
