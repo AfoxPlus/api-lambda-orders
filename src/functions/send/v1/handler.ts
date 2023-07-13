@@ -1,37 +1,20 @@
-import { Order } from '@core/entities/Order'
 import { MongoDBOrderRepository } from '@core/repositories/database/MongoDBOrderRepository'
-import { OrderSendRequest } from '@core/repositories/models/OrderSendRequest';
 import { OrderRepository } from '@core/repositories/OrderRepository';
 import { mongodbconnect } from '@core/utils/mongodb_connection';
 import { formatJSONErrorResponse, formatJSONSuccessResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway'
 import { middyfy } from '@libs/lambda'
-import schema from './schema'
+import { OrderSendRequest } from '@functions/send/v1/OrderSendRequest';
+import { mapRequestToOrder } from '@functions/send/v1/mapper';
 
-const send: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (context) => {
+const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (context) => {
   try {
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
-    const orderRequest: OrderSendRequest = context.body
-    const order: Order = {
-      id: "",
-      date: new Date(orderRequest.date),
-      restaurantId: orderRequest.restaurant_id,
-      tableNumber: orderRequest.table_number,
-      total: orderRequest.total,
-      client: {
-        cel: orderRequest.client.cel,
-        name: orderRequest.client.name
-      },
-      detail: orderRequest.detail.map(item => ({
-        productId: item.product_id,
-        description: item.description,
-        unitPrice: item.unit_price,
-        quantity: item.quantity,
-        subTotal: item.sub_total,
-        currencyCode: item.currency_code
-      }))
-    }
-    const result = await orderRepository.send(order)
+    const orderRequest: OrderSendRequest = context.body as OrderSendRequest
+    const { user_uuid, currency_id } = context.headers
+
+    const order = mapRequestToOrder(orderRequest, user_uuid, currency_id)
+    const result = await orderRepository.send(order, orderRequest.restaurant_id)
     return formatJSONSuccessResponse({
       success: true,
       payload: result,

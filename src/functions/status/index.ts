@@ -5,8 +5,8 @@ export default {
   events: [
     {
       http: {
-        method: 'post',
-        path: 'v1/orders/send'
+        method: 'get',
+        path: 'orders/status'
       }
     }
   ]
