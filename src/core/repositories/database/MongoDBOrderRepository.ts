@@ -6,8 +6,40 @@ import { RestaurantModel } from "@core/repositories/database/models/restaurant.m
 import { CurrencyModel } from "@core/repositories/database/models/currency.model";
 import moment from 'moment';
 import { OrderStateDocument, OrderStateModel } from "@core/repositories/database/models/order_state.model";
+import { OrderState } from "@core/entities/OrderState";
+import { Types } from "mongoose";
 
 export class MongoDBOrderRepository implements OrderRepository {
+
+    updateOrderState = async (orderId: string, newOrderStateId: string): Promise<OrderStatus> => {
+        try {
+            const updateObject = { orderState: newOrderStateId }
+            const result = await OrderModel.findOneAndUpdate({ _id: new Types.ObjectId(orderId) }, updateObject, { new: true })
+                .populate({ path: 'restaurant', model: RestaurantModel })
+                .populate({ path: 'currency', model: CurrencyModel })
+                .populate({ path: 'orderState', model: OrderStateModel }).exec()
+            if (result == null) {
+                return null
+            }
+            return this.documentToOrder(result)
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
+
+    getOrderStates = async (): Promise<OrderState[]> => {
+        try {
+            const result: OrderStateDocument[] = await OrderStateModel.find()
+            return result.map(document => ({
+                id: document._id.toString(),
+                code: document.code,
+                name: document.name
+            }))
+
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
 
     findOne = async (orderId: string): Promise<OrderStatus> => {
         try {
