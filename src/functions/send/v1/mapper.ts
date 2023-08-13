@@ -5,6 +5,7 @@ export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_uuid: str
     const order: Order = {
         userUUID: user_uuid,
         restaurant: orderRequest.restaurant_id,
+        paymentMethod: orderRequest.payment_method,
         currency: currency_id,
         orderType: {
             code: orderRequest.order_type.code,

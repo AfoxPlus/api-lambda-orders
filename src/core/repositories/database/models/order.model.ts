@@ -48,6 +48,7 @@ export interface OrderDocument extends Document {
     total: Number,
     orderState: OrderStateDocument,
     isDone: Boolean,
+    paymentMethod?: string,
     detail: OrderDetailDocument[]
 }
 
@@ -58,6 +59,7 @@ const OrderSchema: Schema = new Schema({
     orderState: { type: mongoose.Schema.Types.ObjectId, ref: 'OrderState' },
     userUUID: { type: String },
     isDone: { type: Boolean, default: false },
+    paymentMethod: { type: String },
     currency: { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
     restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     note: { type: String },

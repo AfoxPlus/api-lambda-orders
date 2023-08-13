@@ -33,6 +33,7 @@ export interface Order {
     orderType: OrderType,
     total: Number,
     client: Client,
+    paymentMethod?: string,
     detail: OrderDetail[]
 }
 
