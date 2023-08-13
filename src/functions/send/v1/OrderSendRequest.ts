@@ -10,6 +10,7 @@ export interface OrderSendRequest {
         description?: string
     },
     restaurant_id: string,
+    payment_method?: string,
     detail: [{
         product_id: string,
         title: string,

@@ -90,6 +90,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             state: result.orderState.name,
             state_code: result.orderState.code,
             restaurant: result.restaurant.name,
+            payment_method: result.paymentMethod,
             order_type: {
                 code: result.orderType.code,
                 title: result.orderType.title,
