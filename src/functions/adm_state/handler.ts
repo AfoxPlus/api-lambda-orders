@@ -3,7 +3,7 @@ import { OrderRepository } from '@core/repositories/OrderRepository';
 import { mongodbconnect } from '@core/utils/mongodb_connection';
 import { formatJSONErrorResponse, formatJSONSuccessResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway'
 import { middyfy } from '@libs/lambda'
-import { OrderUpdateRequest } from '@functions/send_state/OrderUpdateRequest';
+import { OrderUpdateRequest } from '@functions/adm_state/OrderUpdateRequest';
 
 const sendState: ValidatedEventAPIGatewayProxyEvent<OrderUpdateRequest> = async (context) => {
   try {

@@ -11,6 +11,18 @@ import { Types } from "mongoose";
 
 export class MongoDBOrderRepository implements OrderRepository {
 
+    statusByRestaurant = async (restaurantCode: string): Promise<OrderStatus[]> => {
+        try {
+            const result: OrderDocument[] = await OrderModel.find({ isDone: false }).where('restaurant').equals(restaurantCode)
+                .populate({ path: 'restaurant', model: RestaurantModel })
+                .populate({ path: 'currency', model: CurrencyModel })
+                .populate({ path: 'orderState', model: OrderStateModel })
+            return result.map((document) => this.documentToOrder(document))
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
+
     updateOrderState = async (orderId: string, newOrderStateId: string): Promise<OrderStatus> => {
         try {
             const updateObject = { orderState: newOrderStateId }
