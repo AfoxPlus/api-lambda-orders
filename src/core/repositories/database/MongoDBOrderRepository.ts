@@ -123,6 +123,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             productId: document.productId.toString(),
             title: document.title,
             description: document.description,
+            productType: this.getProductType(document),
             unitPrice: `${currency} ${document.unitPrice.toFixed(2)}`,
             quantity: document.quantity,
             subTotal: `${currency} ${document.subTotal.toFixed(2)}`,
@@ -130,6 +131,12 @@ export class MongoDBOrderRepository implements OrderRepository {
             subDetail: this.documentSubDetailToOrderSubDetail(document.subDetail)
         }))
         return detail
+    }
+
+    getProductType(documentDetail: OrderDetailDocument): String {
+        if (documentDetail.productType === "PRODUCT_MENU")
+            return "Menu"
+        else return ""
     }
 
     documentSubDetailToOrderSubDetail(subDetails?: OrderSubDetailDocument[]): any {

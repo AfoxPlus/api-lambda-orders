@@ -16,6 +16,7 @@ export interface OrderDetailDocument extends Document {
     unitPrice: Number,
     quantity: Number,
     subTotal: Number,
+    productType?: String,
     subDetail?: OrderSubDetailDocument[],
     note?: string,
     currencyCode: string
@@ -77,6 +78,7 @@ const OrderSchema: Schema = new Schema({
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
         title: { type: String },
         description: { type: String },
+        productType: { type: String },
         unitPrice: Number,
         quantity: Number,
         subTotal: Number,
