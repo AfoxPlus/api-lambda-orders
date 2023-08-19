@@ -6,6 +6,7 @@ export interface OrderSubDetail {
 
 export interface OrderDetail {
     productId: string,
+    productType: string,
     title: string,
     description: string,
     unitPrice: Number,

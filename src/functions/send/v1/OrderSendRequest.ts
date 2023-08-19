@@ -13,6 +13,7 @@ export interface OrderSendRequest {
     payment_method?: string,
     detail: [{
         product_id: string,
+        product_type: string,
         title: string,
         description: string,
         unit_price: Number,
