@@ -10,4 +10,5 @@ export interface OrderRepository {
     findOne(orderId: string): Promise<OrderStatus>
     getOrderStates(): Promise<OrderState[]>
     updateOrderState(orderId: string, newOrderStateId: string): Promise<OrderStatus>
+    isValidProducts(productIds: string[]): Promise<string[]>
 }

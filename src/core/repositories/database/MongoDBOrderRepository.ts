@@ -8,8 +8,17 @@ import moment from 'moment';
 import { OrderStateDocument, OrderStateModel } from "@core/repositories/database/models/order_state.model";
 import { OrderState } from "@core/entities/OrderState";
 import { Types } from "mongoose";
+import { ProductModel } from "./models/product.model";
 
 export class MongoDBOrderRepository implements OrderRepository {
+    isValidProducts = async (productIds: string[]): Promise<string[]> => {
+        try {
+            const result = await ProductModel.find({ showInApp: false }).where('_id').in(productIds)
+            return result.map(item => item.name)
+        } catch (err) {
+            return [] as string[]
+        }
+    }
 
     statusByRestaurant = async (restaurantCode: string): Promise<OrderStatus[]> => {
         try {
