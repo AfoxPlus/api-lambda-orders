@@ -8,7 +8,7 @@ import { APIGatewayProxyHandler } from 'aws-lambda/trigger/api-gateway-proxy';
 const status: APIGatewayProxyHandler = async (context) => {
   try {
     await mongodbconnect()
-    const { state_id } = context.pathParameters
+    const state_id = context.pathParameters?.state_id
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
     const { restaurant_code } = context.headers
     const result = await orderRepository.statusByRestaurant(restaurant_code, state_id)
