@@ -6,7 +6,7 @@ export default {
     {
       http: {
         method: 'get',
-        path: 'orders/restaurant/status'
+        path: 'orders/restaurant/status/{state_id}'
       }
     }
   ]
