@@ -20,9 +20,9 @@ export class MongoDBOrderRepository implements OrderRepository {
         }
     }
 
-    statusByRestaurant = async (restaurantCode: string): Promise<OrderStatus[]> => {
+    statusByRestaurant = async (restaurantCode: string, stateId: string): Promise<OrderStatus[]> => {
         try {
-            const result: OrderDocument[] = await OrderModel.find({ isDone: false }).where('restaurant').equals(restaurantCode)
+            const result: OrderDocument[] = await OrderModel.find({ isDone: false, orderState: stateId }).where('restaurant').equals(restaurantCode)
                 .populate({ path: 'restaurant', model: RestaurantModel })
                 .populate({ path: 'currency', model: CurrencyModel })
                 .populate({ path: 'orderState', model: OrderStateModel })
