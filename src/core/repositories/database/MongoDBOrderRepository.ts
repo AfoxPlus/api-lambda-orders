@@ -11,6 +11,16 @@ import { Types } from "mongoose";
 import { ProductModel } from "./models/product.model";
 
 export class MongoDBOrderRepository implements OrderRepository {
+
+    archive = async (orderId: string): Promise<Boolean> => {
+        try {
+            await OrderModel.findOneAndUpdate({ _id: new Types.ObjectId(orderId) }, { isDone: true }, { new: true })
+            return true
+        } catch (err) {
+            return false
+        }
+    }
+
     isValidProducts = async (productIds: string[]): Promise<string[]> => {
         try {
             const result = await ProductModel.find({ showInApp: false }).where('_id').in(productIds)

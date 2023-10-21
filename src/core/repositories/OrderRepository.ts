@@ -8,6 +8,7 @@ export interface OrderRepository {
     status(userUUID: string): Promise<OrderStatus[]>
     statusByRestaurant(restaurantCode: string, stateId: string): Promise<OrderStatus[]>
     findOne(orderId: string): Promise<OrderStatus>
+    archive(orderId: string): Promise<Boolean>
     getOrderStates(): Promise<OrderState[]>
     updateOrderState(orderId: string, newOrderStateId: string): Promise<OrderStatus>
     isValidProducts(productIds: string[]): Promise<string[]>
