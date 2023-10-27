@@ -6,6 +6,7 @@ export interface OrderSubDetail {
 
 export interface OrderDetail {
     productId: string,
+    productType: string,
     title: string,
     description: string,
     unitPrice: Number,
@@ -33,6 +34,7 @@ export interface Order {
     orderType: OrderType,
     total: Number,
     client: Client,
+    paymentMethod?: string,
     detail: OrderDetail[]
 }
 

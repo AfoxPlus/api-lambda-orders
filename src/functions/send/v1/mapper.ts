@@ -5,6 +5,7 @@ export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_uuid: str
     const order: Order = {
         userUUID: user_uuid,
         restaurant: orderRequest.restaurant_id,
+        paymentMethod: orderRequest.payment_method,
         currency: currency_id,
         orderType: {
             code: orderRequest.order_type.code,
@@ -19,6 +20,7 @@ export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_uuid: str
         },
         detail: orderRequest.detail.map(item => ({
             productId: item.product_id,
+            productType: item.product_type,
             title: item.title,
             description: item.description,
             unitPrice: item.unit_price,

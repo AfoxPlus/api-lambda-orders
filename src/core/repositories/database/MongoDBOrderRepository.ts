@@ -6,8 +6,71 @@ import { RestaurantModel } from "@core/repositories/database/models/restaurant.m
 import { CurrencyModel } from "@core/repositories/database/models/currency.model";
 import moment from 'moment';
 import { OrderStateDocument, OrderStateModel } from "@core/repositories/database/models/order_state.model";
+import { OrderState } from "@core/entities/OrderState";
+import { Types } from "mongoose";
+import { ProductModel } from "./models/product.model";
 
 export class MongoDBOrderRepository implements OrderRepository {
+
+    archive = async (orderId: string): Promise<Boolean> => {
+        try {
+            await OrderModel.findOneAndUpdate({ _id: new Types.ObjectId(orderId) }, { isDone: true }, { new: true })
+            return true
+        } catch (err) {
+            return false
+        }
+    }
+
+    isValidProducts = async (productIds: string[]): Promise<string[]> => {
+        try {
+            const result = await ProductModel.find({ showInApp: false }).where('_id').in(productIds)
+            return result.map(item => item.name)
+        } catch (err) {
+            return [] as string[]
+        }
+    }
+
+    statusByRestaurant = async (restaurantCode: string, stateId: string): Promise<OrderStatus[]> => {
+        try {
+            const result: OrderDocument[] = await OrderModel.find({ isDone: false, orderState: stateId }).where('restaurant').equals(restaurantCode)
+                .populate({ path: 'restaurant', model: RestaurantModel })
+                .populate({ path: 'currency', model: CurrencyModel })
+                .populate({ path: 'orderState', model: OrderStateModel })
+            return result.map((document) => this.documentToOrder(document))
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
+
+    updateOrderState = async (orderId: string, newOrderStateId: string): Promise<OrderStatus> => {
+        try {
+            const updateObject = { orderState: newOrderStateId }
+            const result = await OrderModel.findOneAndUpdate({ _id: new Types.ObjectId(orderId) }, updateObject, { new: true })
+                .populate({ path: 'restaurant', model: RestaurantModel })
+                .populate({ path: 'currency', model: CurrencyModel })
+                .populate({ path: 'orderState', model: OrderStateModel }).exec()
+            if (result == null) {
+                return null
+            }
+            return this.documentToOrder(result)
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
+
+    getOrderStates = async (): Promise<OrderState[]> => {
+        try {
+            const result: OrderStateDocument[] = await OrderStateModel.find()
+            return result.map(document => ({
+                id: document._id.toString(),
+                code: document.code,
+                name: document.name
+            }))
+
+        } catch (err) {
+            throw new Error("Internal Error")
+        }
+    }
 
     findOne = async (orderId: string): Promise<OrderStatus> => {
         try {
@@ -58,6 +121,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             state: result.orderState.name,
             state_code: result.orderState.code,
             restaurant: result.restaurant.name,
+            payment_method: result.paymentMethod,
             order_type: {
                 code: result.orderType.code,
                 title: result.orderType.title,
@@ -78,6 +142,7 @@ export class MongoDBOrderRepository implements OrderRepository {
             productId: document.productId.toString(),
             title: document.title,
             description: document.description,
+            productType: this.getProductType(document),
             unitPrice: `${currency} ${document.unitPrice.toFixed(2)}`,
             quantity: document.quantity,
             subTotal: `${currency} ${document.subTotal.toFixed(2)}`,
@@ -85,6 +150,12 @@ export class MongoDBOrderRepository implements OrderRepository {
             subDetail: this.documentSubDetailToOrderSubDetail(document.subDetail)
         }))
         return detail
+    }
+
+    getProductType(documentDetail: OrderDetailDocument): String {
+        if (documentDetail.productType === "PRODUCT_MENU")
+            return "Menu"
+        else return ""
     }
 
     documentSubDetailToOrderSubDetail(subDetails?: OrderSubDetailDocument[]): any {

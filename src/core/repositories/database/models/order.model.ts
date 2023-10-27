@@ -16,6 +16,7 @@ export interface OrderDetailDocument extends Document {
     unitPrice: Number,
     quantity: Number,
     subTotal: Number,
+    productType?: String,
     subDetail?: OrderSubDetailDocument[],
     note?: string,
     currencyCode: string
@@ -48,6 +49,7 @@ export interface OrderDocument extends Document {
     total: Number,
     orderState: OrderStateDocument,
     isDone: Boolean,
+    paymentMethod?: string,
     detail: OrderDetailDocument[]
 }
 
@@ -58,6 +60,7 @@ const OrderSchema: Schema = new Schema({
     orderState: { type: mongoose.Schema.Types.ObjectId, ref: 'OrderState' },
     userUUID: { type: String },
     isDone: { type: Boolean, default: false },
+    paymentMethod: { type: String },
     currency: { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
     restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
     note: { type: String },
@@ -75,6 +78,7 @@ const OrderSchema: Schema = new Schema({
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
         title: { type: String },
         description: { type: String },
+        productType: { type: String },
         unitPrice: Number,
         quantity: Number,
         subTotal: Number,

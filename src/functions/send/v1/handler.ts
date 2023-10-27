@@ -14,16 +14,33 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
     const { user_uuid, currency_id } = context.headers
 
     const order = mapRequestToOrder(orderRequest, user_uuid, currency_id)
-    const result = await orderRepository.send(order, orderRequest.restaurant_id)
-    return formatJSONSuccessResponse({
-      success: true,
-      payload: result,
-      message: "Send OK"
-    });
+    const products = await orderRepository.isValidProducts(order.detail.map(item => item.productId))
+    if (products.length == 0) {
+      const result = await orderRepository.send(order, orderRequest.restaurant_id)
+      return formatJSONSuccessResponse({
+        success: true,
+        payload: result,
+        message: {
+          value: "!Pedido enviado correctamente!",
+          info: ""
+        }
+      });
+    } else {
+      return formatJSONSuccessResponse({
+        success: false,
+        payload: {},
+        message: {
+          value: "Hubo un problema al enviar el pedido",
+          info: "Uno o mas productos ya no se encuentran disponibles.",
+          meta_data: products
+        }
+      });
+    }
+
+
   } catch (err) {
     return formatJSONErrorResponse(err);
   }
 }
-
 
 export const main = middyfy(send);

@@ -5,6 +5,7 @@ export interface OrderStatus {
     state: string,
     state_code: string,
     restaurant: string,
+    payment_method?: string,
     order_type: {
         code: string,
         title: string,
