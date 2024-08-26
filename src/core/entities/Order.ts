@@ -25,6 +25,7 @@ export interface Client {
 export interface Order {
     id?: string,
     userUUID?: string,
+    userFCMToken?: string,
     number?: string,
     date?: string,
     orderState?: string,

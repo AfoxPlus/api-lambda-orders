@@ -1,9 +1,10 @@
 import { Order } from "@core/entities/Order"
 import { OrderSendRequest } from "@functions/send/v1/OrderSendRequest"
 
-export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_uuid: string, currency_id: string): Order => {
+export const mapRequestToOrder = (orderRequest: OrderSendRequest, user_fcm_token: string, user_uuid: string, currency_id: string): Order => {
     const order: Order = {
         userUUID: user_uuid,
+        userFCMToken: user_fcm_token,
         restaurant: orderRequest.restaurant_id,
         paymentMethod: orderRequest.payment_method,
         currency: currency_id,

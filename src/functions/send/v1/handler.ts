@@ -11,9 +11,9 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
     await mongodbconnect()
     const orderRepository: OrderRepository = new MongoDBOrderRepository()
     const orderRequest: OrderSendRequest = context.body as OrderSendRequest
-    const { user_uuid, currency_id } = context.headers
+    const { user_uuid, currency_id, user_fcm_token } = context.headers
 
-    const order = mapRequestToOrder(orderRequest, user_uuid, currency_id)
+    const order = mapRequestToOrder(orderRequest,user_fcm_token, user_uuid, currency_id)
     const products = await orderRepository.isValidProducts(order.detail.map(item => item.productId))
     if (products.length == 0) {
       const result = await orderRepository.send(order, orderRequest.restaurant_id)
