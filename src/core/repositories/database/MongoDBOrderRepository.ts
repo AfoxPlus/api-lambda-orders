@@ -10,12 +10,10 @@ import { OrderState } from "@core/entities/OrderState";
 import { Types } from "mongoose";
 import { ProductModel } from "./models/product.model";
 import admin from "firebase-admin"
-
-const serviceAccount  = require("fcm_account_key.json")
-const firebaseAdmin = admin.initializeApp({credential : serviceAccount})
 export class MongoDBOrderRepository implements OrderRepository {
-
     sendOrderNotification = async (userFCMToken: string, title: string, body: string): Promise<Boolean> => {
+        const serviceAccount  = require("fcm_account_key.json")
+        const firebaseAdmin = admin.initializeApp({  credential: admin.credential.cert(serviceAccount)})
         await firebaseAdmin.messaging().send({
             token: userFCMToken,
             notification: {
