@@ -9,8 +9,24 @@ import { OrderStateDocument, OrderStateModel } from "@core/repositories/database
 import { OrderState } from "@core/entities/OrderState";
 import { Types } from "mongoose";
 import { ProductModel } from "./models/product.model";
+import admin from "firebase-admin"
 
+const serviceAccount  = require("fcm_account_key.json")
+const firebaseAdmin = admin.initializeApp({credential : serviceAccount})
 export class MongoDBOrderRepository implements OrderRepository {
+
+    sendOrderNotification = async (userFCMToken: string, title: string, body: string): Promise<Boolean> => {
+        await firebaseAdmin.messaging().send({
+            token: userFCMToken,
+            notification: {
+                title,
+                body
+            }
+        }).catch(_ => {
+            return false
+        })
+        return true
+    }
 
     archive = async (orderId: string): Promise<Boolean> => {
         try {
@@ -116,6 +132,7 @@ export class MongoDBOrderRepository implements OrderRepository {
     documentToOrder(result: OrderDocument): OrderStatus {
         return {
             id: result._id.toString(),
+            fcm_token: result.userFCMToken,
             number: `#${result.number}`,
             date: (moment(result.date)).utcOffset(-5).format('DD MMM YYYY, hh:mm A'),
             state: result.orderState.name,

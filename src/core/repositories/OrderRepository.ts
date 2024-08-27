@@ -12,4 +12,5 @@ export interface OrderRepository {
     getOrderStates(): Promise<OrderState[]>
     updateOrderState(orderId: string, newOrderStateId: string): Promise<OrderStatus>
     isValidProducts(productIds: string[]): Promise<string[]>
+    sendOrderNotification(userFCMToken: string, title: string, body: string):Promise<Boolean>
 }

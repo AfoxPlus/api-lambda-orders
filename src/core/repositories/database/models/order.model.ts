@@ -38,9 +38,9 @@ export interface OrderTypeDocument extends Document {
 
 export interface OrderDocument extends Document {
     _id: Types.ObjectId,
-    number: String,
-    userUUID: String,
-    userFCMToken: String,
+    number: string,
+    userUUID: string,
+    userFCMToken: string,
     client: ClientDocument,
     orderType: OrderTypeDocument,
     date: Date,

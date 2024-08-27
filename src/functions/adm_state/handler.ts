@@ -18,6 +18,11 @@ const sendState: ValidatedEventAPIGatewayProxyEvent<OrderUpdateRequest> = async 
         message: "Send state error"
       });
     }
+
+    const title = "¡Buenas noticias, "+ result.client.name +"!"
+    const body = "Tu pedido #"+ result.number +" cambió de estado a "+ result.state+". Sigue el estado en tiempo real en nuestra app."
+    await orderRepository.sendOrderNotification(result.fcm_token, title, body)
+
     return formatJSONSuccessResponse({
       success: true,
       payload: result,

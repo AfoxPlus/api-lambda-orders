@@ -1,4 +1,5 @@
 export interface OrderStatus {
+    fcm_token?: string,
     id: string,
     number: string,
     date: string,
