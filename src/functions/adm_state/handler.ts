@@ -21,7 +21,7 @@ const sendState: ValidatedEventAPIGatewayProxyEvent<OrderUpdateRequest> = async 
 
     const title = "¡Buenas noticias, "+ result.client.name +"!"
     const body = "Tu pedido "+ result.number +" cambió de estado a "+ result.state+". Sigue el estado en tiempo real en nuestra app."
-    await orderRepository.sendOrderNotification(result.fcm_token, title, body)
+    await orderRepository.sendOrderNotification(result.fcm_token, title, body).catch(_ => {})
 
     return formatJSONSuccessResponse({
       success: true,
