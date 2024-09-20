@@ -19,7 +19,7 @@ const send: ValidatedEventAPIGatewayProxyEvent<OrderSendRequest> = async (contex
       const result = await orderRepository.send(order, orderRequest.restaurant_id)
 
       const title = "¡Gracias por tu compra, "+ result.client.name +"! 🎉"
-      const body = "Tu pedido "+ result.number +" ha sido enviado y pronto estaremos preparándolo para ti. Te avisaremos cuando esté listo."
+      const body = "Tu pedido "+ result.number +" ha sido enviado y pronto estaremos preparándolo para ti."
       await orderRepository.sendOrderNotification(result.fcm_token, title, body).catch(_ => { })
 
       return formatJSONSuccessResponse({

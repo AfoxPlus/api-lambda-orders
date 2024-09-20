@@ -20,7 +20,8 @@ export class MongoDBOrderRepository implements OrderRepository {
                 title,
                 body
             }
-        }).catch(_ => {
+        }).catch(error => {
+            console.log("Send notification error: "+error)
             return false
         })
         return true
