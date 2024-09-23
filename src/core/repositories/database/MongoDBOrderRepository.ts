@@ -105,6 +105,7 @@ export class MongoDBOrderRepository implements OrderRepository {
                 .populate({ path: 'restaurant', model: RestaurantModel })
                 .populate({ path: 'currency', model: CurrencyModel })
                 .populate({ path: 'orderState', model: OrderStateModel })
+                .sort({date: 'descending'})
             return result.map((document) => this.documentToOrder(document))
         } catch (err) {
 
